@@ -88,5 +88,19 @@ public class Crypt {
 
 		return xifrat.toString();
 	}
+	
+	// Metode per desxifrar NUMERIC
+	public static String desxifrarTextNumeric(String text) {
+		StringBuilder xifrat = new StringBuilder();
+
+		return xifrat.toString();
+	}
+
+	// Metode per xifrar NUMERIC
+	public static String xifrarTextNumeric(String text) {
+		StringBuilder xifrat = new StringBuilder();
+
+		return xifrat.toString();
+	}
 
 }

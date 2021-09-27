@@ -1,4 +1,4 @@
-public class Encrypt extends Crypt {
+public class Principal extends Crypt {
 
 public static void main(String[] args) {
 		//Variables
