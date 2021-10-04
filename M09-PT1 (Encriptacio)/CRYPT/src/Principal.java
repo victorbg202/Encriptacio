@@ -1,38 +1,35 @@
+import java.util.Scanner;
+
 public class Principal extends Crypt {
 
 public static void main(String[] args) {
 		//Variables
-		String comando;
-        int estat = 0;
-		IntroduirEstat(estat);
-        //Tancar teclat
-        sc.close();
+	    sc = new Scanner(System.in);
+        IntroduirOpcioMenuPrincipal();
+		sc.close();
     }
 
-	//Introduir estat
-	public static int IntroduirEstat(int estat) {
-        do {
-        	//Introduiir estat
-			OpcionesMenu();
-			estat=sc.nextInt();
-        	
-			//entar comanda
-        	switch (estat) {
-				case 0:
-					System.out.println("Ha sido un placer!");
-					break;
-				case 1:
-					entrarMissatge();
-									
-					break;
+	//Introduir opcions menu principal
+	public static void IntroduirOpcioMenuPrincipal() {
+		//Introduiir estat
+		MenuOpcionsPrincipal();
+		int opcio = 0;
+		do {
+			opcio = introduirNum(opcio);
+			if (opcio == 1) {
+				entrarMissatge();
+				IntroduirOpcioMenuEncriptacio();
+			} else if (opcio == 0) {
+				Sotir();
+			} else {
+				System.out.print("Introdueix una opcio valida (1-0): ");
 			}
-
-		} while (estat!=0);
-        while (estat!=1);
-		return estat;
+		} while (opcio != 0 && opcio != 1);
 	}
-
-	public static void OpcionesMenu(){
+	
+	
+	// Mostrar menu principal
+	public static void MenuOpcionsPrincipal(){
 		System.out.println(" \t\t ----------------------------------");
 		System.out.println("\t\t||"+"*****"+"||"+"  MENU PRINCIPAL  "+"||"+"*****"+"||");
 		System.out.println("\t\t ----------------------------------");
@@ -40,12 +37,12 @@ public static void main(String[] args) {
 		System.out.println("\t\t||    "+"************************"+"    ||");
 		System.out.println("\t\t||  //                        \\\\  ||");
 		System.out.println("\t\t|| ||        "+"1) INICIAR"+"        || ||");
-		System.out.println("\t\t|| ||        "+"0) SALIR"+"          || ||");
+		System.out.println("\t\t|| ||        "+"0) SORTIR"+"         || ||");
 		System.out.println("\t\t|| ||                          || ||");
 		System.out.println("\t\t||   "+"**************************"+"   ||");
 		System.out.println("\t\t||                                ||");
 		System.out.println("\t\t ----------------------------------");
-		System.out.print("Introduce que opción vas a escojer:");
+		System.out.print("Introduce que opcion vas a escojer:");
 	}
     
 }
