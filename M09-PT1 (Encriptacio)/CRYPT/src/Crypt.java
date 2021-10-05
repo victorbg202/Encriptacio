@@ -5,13 +5,9 @@ public class Crypt {
 	//Atributs globals
 	public static Scanner sc;
 	public static String MissatgeOriginal;
-	static String Alfabet;
+	static String Alfabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?!.,_";
 	public static String MissatgeModificat;
-	static ArrayList<int[]> historial=new ArrayList<int[]>();
-
-//int a1[]={1,2,3};
-//arl.add(0,a1);
-//System.out.println("Arraylist contains:"+arl.get(0));
+	static ArrayList<String> historial=new ArrayList<String>();
 
 	//Entrar missatge
 	public static void entrarMissatge() {
@@ -33,10 +29,20 @@ public class Crypt {
 			opcio = introduirNum(opcio);
 			if (opcio == 1) {
 				rentarPantalla();
-				xifratTextCesar(MissatgeModificat);
+				System.out.print("Introdueix un codi per xifrar: ");
+				int codi = sc.nextInt();
+				historial.add("1 "+codi);
+				xifratTextCesar(MissatgeModificat, codi);
+				rentarPantalla();
+				IntroduirOpcioMenuEncriptacio();
 			} else if (opcio == 2) {
 				rentarPantalla();
-				desxifratTextCesar(MissatgeModificat);
+				System.out.print("Introdueix un codi per desxifrar: ");
+				int codi = sc.nextInt();
+				historial.add("2 "+codi);
+				desxifratTextCesar(MissatgeModificat, codi);
+				rentarPantalla();
+				IntroduirOpcioMenuEncriptacio();
 			} else if (opcio == 3) {
 				
 			} else if (opcio == 4) {
@@ -47,18 +53,22 @@ public class Crypt {
 				
 			} else if (opcio == 7) {
 				rentarPantalla();
-				mostrarMissatgeOriginal();
+				desencriptarTotal();
 			} else if (opcio == 8) {
+				rentarPantalla();
+				mostrarMissatgeOriginal();
+			} else if (opcio == 9) {
 				rentarPantalla();
 				mostrarMissatgeModificat();
 			} else if (opcio == 0) {
+				historial.clear();
 				rentarPantalla();
 				Principal.IntroduirOpcioMenuPrincipal();
 			} else {
 				System.out.print("Introdueix una opcio valida (0-8): ");
 			}
 			
-		} while (opcio < 0 || opcio > 6);
+		} while (opcio < 0 || opcio > 7);
 		
 	}
 	
@@ -66,6 +76,11 @@ public class Crypt {
 	
 	// Mostrar menu encriptacio
 	public static void MenuOpcionsEncriptacio(){
+		
+		for(int i = 0; i < historial.size(); i++) {   
+		    System.out.println(historial.get(i).toString());
+		}  
+		
 		System.out.println(" \t\t ----------------------------------");
 		System.out.println("\t\t||"+"*****"+"||"+"  MENU PRINCIPAL  "+"||"+"*****"+"||");
 		System.out.println("\t\t ----------------------------------");
@@ -81,14 +96,17 @@ public class Crypt {
 		System.out.println("\t\t|| ||       "+"5) E. Numeric"+"      || ||");
 		System.out.println("\t\t|| ||       "+"6) D. Numeric"+"      || ||");
 		System.out.println("\t\t|| ||                          || ||");
-		System.out.println("\t\t|| ||   "+"7) Missatge Original"+"   || ||");
-		System.out.println("\t\t|| ||     "+"8) Missatge Actual"+"   || ||");
+		System.out.println("\t\t|| ||        "+"7) D. TOTAL "+"      || ||");
+		System.out.println("\t\t|| ||                          || ||");
+		System.out.println("\t\t|| ||   "+"8) Missatge Original"+"   || ||");
+		System.out.println("\t\t|| ||     "+"9) Missatge Actual"+"   || ||");
 		System.out.println("\t\t|| ||                          || ||");
 		System.out.println("\t\t|| ||        "+"0) ENRERE"+"         || ||");
 		System.out.println("\t\t|| ||                          || ||");
 		System.out.println("\t\t||   "+"**************************"+"   ||");
 		System.out.println("\t\t||                                ||");
 		System.out.println("\t\t ----------------------------------");
+		System.out.println();
 		System.out.print("Introduce que opcion vas a escojer:");
 	}
 	
@@ -105,9 +123,19 @@ public class Crypt {
 	}
 	
 	//Desencriptar tot seguint l'historial
-	public static String desencriptarTotal() {
-		
-		return MissatgeOriginal;
+	public static void desencriptarTotal() {
+		String accio = "";
+		for (int i = 0; i < historial.size(); i++) {
+			accio = historial.get(i).toString();
+			String[] accioSplit = accio.split("\\s+");
+			if (Integer.parseInt(accioSplit[0]) == 1) {
+				desxifratTextCesar(MissatgeModificat, Integer.parseInt(accioSplit[1]));
+			} else if (Integer.parseInt(accioSplit[0]) == 2) {
+				xifratTextCesar(MissatgeModificat, Integer.parseInt(accioSplit[1]));
+			}
+		}
+		historial.clear();
+		IntroduirOpcioMenuEncriptacio();
 	}
 	
 	//Mostrar alfabet
@@ -117,76 +145,89 @@ public class Crypt {
 	
 	//Sortir
 	public static void Sotir() {
+		sc.close();
 		System.out.println("Ha sido un placer!");
 	}
 	
 
 	// Metode per xifrar CESAR
-	public static void xifratTextCesar(String text) {
-		System.out.print("Introdueix un codi per xifrar: ");
-		int codi = sc.nextInt();
-		StringBuilder xifrat = new StringBuilder();
-		codi = codi % 26;
+//	public static void xifratTextCesar(String text, int codi) {
+//		StringBuilder xifrat = new StringBuilder();
+//		codi = codi % 26;
+//
+//		for (int i = 0; i < text.length(); i++) {
+//			if (text.charAt(i) >= 'a' && text.charAt(i) <= 'z') {
+//				if ((text.charAt(i) + codi) > 'z') {
+//					xifrat.append((char) (text.charAt(i) + codi - 26));
+//				} else {
+//					xifrat.append((char) (text.charAt(i) + codi));
+//				}
+//			} else if (text.charAt(i) >= 'A' && text.charAt(i) <= 'Z') {
+//				if ((text.charAt(i) + codi) > 'Z') {
+//					xifrat.append((char) (text.charAt(i) + codi - 26));
+//				} else {
+//					xifrat.append((char) (text.charAt(i) + codi));
+//				}
+//			}
+//		}
+//		MissatgeModificat = xifrat.toString();
+//	}
+	
+	public static void xifratTextCesar(String cadena,int codi) {
+        String cadenaCod="";
+        for (int i = 0; i < cadena.length() ; i++) {
+            for (int j=0; j < Alfabet.length(); j++) {
+                if (cadena.charAt(i)==Alfabet.charAt(j)) {
+                    cadenaCod+=Alfabet.charAt((j+codi)%Alfabet.length());
+                }
+            }
+        }
+        MissatgeModificat=cadenaCod;
+    }
 
-		for (int i = 0; i < text.length(); i++) {
-			if (text.charAt(i) >= 'a' && text.charAt(i) <= 'z') {
-				if ((text.charAt(i) + codi) > 'z') {
-					xifrat.append((char) (text.charAt(i) + codi - 26));
-				} else {
-					xifrat.append((char) (text.charAt(i) + codi));
-				}
-			} else if (text.charAt(i) >= 'A' && text.charAt(i) <= 'Z') {
-				if ((text.charAt(i) + codi) > 'Z') {
-					xifrat.append((char) (text.charAt(i) + codi - 26));
-				} else {
-					xifrat.append((char) (text.charAt(i) + codi));
-				}
-			}
-		}
-		MissatgeModificat = xifrat.toString();
-		
-
-		int accio[]={1, codi};
-		historial.add(accio);
-
-		rentarPantalla();
-		IntroduirOpcioMenuEncriptacio();
-	}
-
-	// Metode per desxifrar CESAR
-	public static void desxifratTextCesar(String text) {
-		System.out.print("Introdueix un codi per desxifrar: ");
-		int codi = sc.nextInt();
-		StringBuilder xifrat = new StringBuilder();
-		codi = codi % 26;
-
-		for (int i = 0; i < text.length(); i++) {
-			if (text.charAt(i) >= 'a' && text.charAt(i) <= 'z') {
-				if ((text.charAt(i) - codi) < 'a') {
-					xifrat.append((char) (text.charAt(i) - codi + 26));
-				} else {
-					xifrat.append((char) (text.charAt(i) - codi));
-				}
-			} else if (text.charAt(i) >= 'A' && text.charAt(i) <= 'Z') {
-				if ((text.charAt(i) - codi) < 'A') {
-					xifrat.append((char) (text.charAt(i) - codi + 26));
-				} else {
-					xifrat.append((char) (text.charAt(i) - codi));
-				}
-			}
-		}
-		MissatgeModificat = xifrat.toString();
-		
-		int accio[]={2, codi};
-		historial.add(accio);
-
-		rentarPantalla();
-		IntroduirOpcioMenuEncriptacio();
-	}
+//	// Metode per desxifrar CESAR
+//	public static void desxifratTextCesar(String text, int codi) {
+//		StringBuilder xifrat = new StringBuilder();
+//		codi = codi % 26;
+//
+//		for (int i = 0; i < text.length(); i++) {
+//			if (text.charAt(i) >= 'a' && text.charAt(i) <= 'z') {
+//				if ((text.charAt(i) - codi) < 'a') {
+//					xifrat.append((char) (text.charAt(i) - codi + 26));
+//				} else {
+//					xifrat.append((char) (text.charAt(i) - codi));
+//				}
+//			} else if (text.charAt(i) >= 'A' && text.charAt(i) <= 'Z') {
+//				if ((text.charAt(i) - codi) < 'A') {
+//					xifrat.append((char) (text.charAt(i) - codi + 26));
+//				} else {
+//					xifrat.append((char) (text.charAt(i) - codi));
+//				}
+//			}
+//		}
+//		MissatgeModificat = xifrat.toString();
+//	}
+	
+	public static void desxifratTextCesar(String cadena,int codi) {
+        String cadenaCod="";
+        for (int i = 0; i < cadena.length() ; i++) {
+            for (int j=0; j < Alfabet.length(); j++) {
+                if (cadena.charAt(i)==Alfabet.charAt(j)) {
+                    cadenaCod+=Alfabet.charAt((j-codi)%Alfabet.length());
+                }
+            }
+        }
+        MissatgeModificat=cadenaCod;
+    }
 
 	// Metode per desxifrar MONOALFABETIC
 	public static String desxifrarTextMonoalfabetic(String text) {
 		StringBuilder xifrat = new StringBuilder();
+		
+		//historial.add("3 "+codi);
+
+		rentarPantalla();
+		IntroduirOpcioMenuEncriptacio();
 
 		return xifrat.toString();
 	}
@@ -194,6 +235,11 @@ public class Crypt {
 	// Metode per xifrar MONOALFABETIC
 	public static String xifrarTextMonoalfabetic(String text) {
 		StringBuilder xifrat = new StringBuilder();
+		
+		//historial.add("4 "+codi);
+
+		rentarPantalla();
+		IntroduirOpcioMenuEncriptacio();
 
 		return xifrat.toString();
 	}
@@ -201,6 +247,11 @@ public class Crypt {
 	// Metode per desxifrar NUMERIC
 	public static String desxifrarTextNumeric(String text) {
 		StringBuilder xifrat = new StringBuilder();
+		
+		//historial.add("5 "+codi);
+
+		rentarPantalla();
+		IntroduirOpcioMenuEncriptacio();
 
 		return xifrat.toString();
 	}
@@ -208,6 +259,11 @@ public class Crypt {
 	// Metode per xifrar NUMERIC
 	public static String xifrarTextNumeric(String text) {
 		StringBuilder xifrat = new StringBuilder();
+		
+		//historial.add("6 "+codi);
+
+		rentarPantalla();
+		IntroduirOpcioMenuEncriptacio();
 
 		return xifrat.toString();
 	}
