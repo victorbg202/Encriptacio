@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Crypt {
@@ -125,6 +126,7 @@ public class Crypt {
 	//Desencriptar tot seguint l'historial
 	public static void desencriptarTotal() {
 		String accio = "";
+		Collections.reverse(historial); 
 		for (int i = 0; i < historial.size(); i++) {
 			accio = historial.get(i).toString();
 			String[] accioSplit = accio.split("\\s+");
@@ -206,10 +208,35 @@ public class Crypt {
 //			}
 //		}
 //		MissatgeModificat = xifrat.toString();
+//	
+//	public String Desencriptar(String t, int key){        
+//        String texto = LimpiarCadena(t);
+//        String res = "";        
+//        for(int i = 0; i < texto.length();i++)
+//        {            
+//            int pos = tabla.indexOf(texto.charAt(i));            
+//            if ((pos - key) < 0){
+//                res = res + tabla.charAt((pos-key) + tabla.length());
+//            }
+//            else
+//            {
+//                res = res + tabla.charAt(pos-key);
+//            }         
+//        }        
+//        return res;
+//    }
 //	}
 	
 	public static void desxifratTextCesar(String cadena,int codi) {
         String cadenaCod="";
+        //
+        String abcInvertido = "";
+		// Recorremos la original del final al inicio
+		for (int indice = cadena.length() - 1; indice >= 0; indice--) {
+			// Y vamos concatenando cada carácter a la nueva cadena
+			abcInvertido += cadena.charAt(indice);
+		}
+		
         for (int i = 0; i < cadena.length() ; i++) {
             for (int j=0; j < Alfabet.length(); j++) {
                 if (cadena.charAt(i)==Alfabet.charAt(j)) {
