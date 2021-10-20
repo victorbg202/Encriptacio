@@ -5,6 +5,9 @@ public class Principal extends Crypt {
 public static void main(String[] args) {
 		//Variables
 	    sc = new Scanner(System.in);
+	    
+	    //Funcionamiento
+        setAlfabeto();
         IntroduirOpcioMenuPrincipal();
 		sc.close();
     }
