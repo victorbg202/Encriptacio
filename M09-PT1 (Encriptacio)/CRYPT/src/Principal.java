@@ -8,6 +8,7 @@ public static void main(String[] args) {
 	    
 	    //Funcionamiento
         setAlfabeto();
+        rentarPantalla();
         IntroduirOpcioMenuPrincipal();
 		sc.close();
     }

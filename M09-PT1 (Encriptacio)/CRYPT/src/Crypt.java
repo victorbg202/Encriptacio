@@ -71,7 +71,6 @@ public class Crypt {
 			} else {
 				System.out.print("Introdueix una opcio valida (0-10): ");
 			}
-			System.out.println();
 
 		} while (opcio < 0 || opcio > 10);
 
