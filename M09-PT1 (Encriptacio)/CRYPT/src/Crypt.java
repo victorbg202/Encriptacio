@@ -33,7 +33,7 @@ public class Crypt {
       opcio = introduirNum(opcio);
       if (opcio == 1) {
         rentarPantalla();
-        System.out.print("Introdueix un codi per xifrar: ");
+        System.out.print("Introdueix un codi per xifrar (numero): ");
         int codi = sc.nextInt();
         historial.add("1 " + codi);
         xifratTextCesar(MissatgeModificat, codi);
@@ -41,14 +41,18 @@ public class Crypt {
         IntroduirOpcioMenuEncriptacio();
       } else if (opcio == 2) {
         rentarPantalla();
-        System.out.print("Introdueix un codi per desxifrar: ");
+        System.out.print("Introdueix un codi per desxifrar (numero): ");
         int codi = sc.nextInt();
         historial.add("2 " + codi);
         desxifratTextCesar(MissatgeModificat, codi);
         rentarPantalla();
         IntroduirOpcioMenuEncriptacio();
       } else if (opcio == 3) {
-        xifrarTextMonoalfabetic(MissatgeModificat);
+	    rentarPantalla();
+	    System.out.print("Introdueix un codi per xifrar (paraula): ");
+	    String codi = sc.nextLine();
+        historial.add("3 " + codi);
+    	xifrarTextMonoalfabetic(codi);
         rentarPantalla();
         IntroduirOpcioMenuEncriptacio();
       } else if (opcio == 4) {} else if (opcio == 5) {} else if (
@@ -233,45 +237,54 @@ public class Crypt {
 
     return xifrat.toString();
   }
+  
+  //Generar alfabet amb clau+alfabet traient els caracters duplicats
+  public static void AlfabetClau(String clau) {
+	  String str = "";
+	  
+	  for (int i = 0; i < Alfabet.size(); i++) {
+	      str += clau + Alfabet.get(i).charValue();
+	  }
+	  
+	  StringBuilder sb=new StringBuilder();
+      for(int i=0;i<str.length();i++){
+          if(str.indexOf(str.charAt(i))==i){
+              //Primera impresi�n
+              sb.append(str.charAt(i));
+          }
+
+      }
+      String result=sb.toString();
+      System.out.println(result);
+  }
+  
 
   // Metode per xifrar MONOALFABETIC
   public static void xifrarTextMonoalfabetic(String s) {
-
 	String alpha = "abcdefghijklmnopqrstuvwxyz"; 
+	StringBuilder ssb = new StringBuilder(alpha);
 	String [] key = s.split("");
 	String  newKey;
-	// Creating array of string length
 	char[] ch = new char[s.length()];
-
 	StringBuilder sb = new StringBuilder();
-
-	for(int i=0;i<s.length();i++){
-		if(s.indexOf(s.charAt(i))==i){
+	String alfabetKey = s + Alfabet.toString(); 
+	
+	//Treure lletres repetides
+	for(int i=0;i<alfabetKey.length();i++){
+		if(alfabetKey.indexOf(alfabetKey.charAt(i))==i){
 			//Primera impresión
-			sb.append(s.charAt(i));
+			sb.append(alfabetKey.charAt(i));
 		}
 
 	}
 	String senseDuplicat=sb.toString();
-
-	StringBuilder ssb = new StringBuilder(alpha);
-
-	StringBuilder sssb = new StringBuilder();
-
-	newKey = senseDuplicat + ssb;  
-
-	for(int i=0;i<newKey.length();i++){
-		if(newKey.indexOf(newKey.charAt(i))==i){
-			//Primera impresión
-			sssb.append(newKey.charAt(i));
-		}
-
-	}
+	
+	System.out.println(senseDuplicat);
+	
+	
 
 
-	String [] newCharKey = newKey.split("");
-
-	  System.out.println(newKey);
+	String [] newCharKey = alfabetKey.split("");
 
 	// Copy character by character into array
 	for (int i = 0; i < s.length(); i++) {
