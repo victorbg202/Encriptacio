@@ -54,6 +54,13 @@ public class Crypt {
 				rentarPantalla();
 				IntroduirOpcioMenuEncriptacio();
 			} else if (opcio == 4) {
+				rentarPantalla();
+				System.out.print("Introdueix un codi per xifrar (paraula): ");
+				String codi = sc.next();
+				historial.add("4 " + codi);
+				desxifrarTextMonoalfabetic(codi);
+				rentarPantalla();
+				IntroduirOpcioMenuEncriptacio();
 			} else if (opcio == 5) {
 			} else if (opcio == 6) {
 			} else if (opcio == 7) {
@@ -161,7 +168,7 @@ public class Crypt {
 				xifratTextCesar(MissatgeModificat, Integer.parseInt(accioSplit[1]));
 			} else if (Integer.parseInt(accioSplit[0]) == 3) {
 				desxifrarTextMonoalfabetic(accioSplit[1]);
-			}else if (Integer.parseInt(accioSplit[0]) == 4) {
+			} else if (Integer.parseInt(accioSplit[0]) == 4) {
 				xifrarTextMonoalfabetic(accioSplit[1]);
 			}
 		}
@@ -224,10 +231,71 @@ public class Crypt {
 	}
 
 	// Metode per desxifrar MONOALFABETIC
-	public static String desxifrarTextMonoalfabetic(String text) {
+	public static void desxifrarTextMonoalfabetic(String codi) {
+		// Creem l'alfabet desordenat
+		String alfaMonoDesordenat = "";
+		alfaMonoDesordenat = crearAlfabetMono(codi);
+
+		// Desxifrar missatge
+		String[] splitMissatgeMod = MissatgeModificat.split("");
+		String xifratMono = "";
+		int posAlfaO = 0;
+
+		for (int i = 0; i < splitMissatgeMod.length; i++) {
+			String letra = splitMissatgeMod[i];
+
+			// Obtener posicion en el alfabeto original
+			for (int j = 0; j < alfaMonoDesordenat.length(); j++) {
+				//
+				System.out.println(String.valueOf(alfaMonoDesordenat.charAt(j)) + " ---- " + letra);
+				if (String.valueOf(alfaMonoDesordenat.charAt(j)).equals(letra)) {
+					System.out.println("ok");
+					posAlfaO = j;
+					xifratMono += Alfabet.get(posAlfaO).toString();
+				}
+			}
+		}
+
+		MissatgeModificat = xifratMono;
+
+		rentarPantalla();
+		IntroduirOpcioMenuEncriptacio();
+	}
+
+	// Metode per xifrar MONOALFABETIC
+	public static void xifrarTextMonoalfabetic(String codi) {
+		// Creem l'alfabet desordenat
+		String alfaMonoDesordenat = "";
+		alfaMonoDesordenat = crearAlfabetMono(codi);
+
+		// Xifrar missatge
+		String[] splitMissatgeMod = MissatgeModificat.split("");
+		String xifratMono = "";
+		int posAlfaO = 0;
+		
+		//
+		for (int i = 0; i < splitMissatgeMod.length; i++) {
+			String letra = splitMissatgeMod[i];
+
+			// Obtener posicion en el alfabeto original
+			for (int j = 0; j < Alfabet.size(); j++) {
+				//
+				if (letra.equals(Alfabet.get(j).toString())) {
+					posAlfaO = j;
+					xifratMono += alfaMonoDesordenat.charAt(posAlfaO);
+				}
+			}
+		}
+
+		MissatgeModificat = xifratMono;
+
+	}
+
+	// Metode per desxifrar NUMERIC
+	public static String desxifrarTextNumeric(String text) {
 		StringBuilder xifrat = new StringBuilder();
 
-		// historial.add("3 "+codi);
+		// historial.add("5 "+codi);
 
 		rentarPantalla();
 		IntroduirOpcioMenuEncriptacio();
@@ -235,28 +303,20 @@ public class Crypt {
 		return xifrat.toString();
 	}
 
-	// Generar alfabet amb clau+alfabet traient els caracters duplicats
-	public static String AlfabetClau(String clau) {
-		String str = "";
+	// Metode per xifrar NUMERIC
+	public static String xifrarTextNumeric(String text) {
+		StringBuilder xifrat = new StringBuilder();
 
-		for (int i = 0; i < Alfabet.size(); i++) {
-			str += clau + Alfabet.get(i).charValue();
-		}
+		// historial.add("6 "+codi);
 
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < str.length(); i++) {
-			if (str.indexOf(str.charAt(i)) == i) {
-				// Primera impresión
-				sb.append(str.charAt(i));
-			}
+		rentarPantalla();
+		IntroduirOpcioMenuEncriptacio();
 
-		}
-		String result = sb.toString();
-		return result;
+		return xifrat.toString();
 	}
 
-	// Metode per xifrar MONOALFABETIC
-	public static void xifrarTextMonoalfabetic(String codi) {
+	//Generem l'alfabet desordenat
+	public static String crearAlfabetMono(String codi) {
 		// S'extreuen els caracters duplicats i s'afegeix l'alfabet a continuació
 		String alfabetMono = "";
 
@@ -298,9 +358,9 @@ public class Crypt {
 					mAlfabetMono[i][j] = "";
 					cont++;
 				}
-				//System.out.print(mAlfabetMono[i][j] + " ");
+				// System.out.print(mAlfabetMono[i][j] + " ");
 			}
-			//System.out.println();
+			// System.out.println();
 		}
 
 		// Guardem l'alfabet desordenat
@@ -311,51 +371,28 @@ public class Crypt {
 				alfaMonoDesordenat = alfaMonoDesordenat + mAlfabetMono[j][i];
 			}
 		}
-		
-		//Xifrar missatge
-		String [] splitMissatgeMod = MissatgeModificat.split("");
-		String xifratMono = "";
-		int posAlfaO = 0;
-		
-		for (int i = 0; i < splitMissatgeMod.length; i++) {
-			String letra = splitMissatgeMod[i];
-			
-			//Obtener posicion en el alfabeto original
-			for (int j = 0; j < Alfabet.size(); j++) {
-				//				
-				if (letra.equals(Alfabet.get(j).toString())) {
-					posAlfaO = j;
-					xifratMono += alfaMonoDesordenat.charAt(posAlfaO);
-				}
-			}
+
+		return alfaMonoDesordenat;
+	}
+
+	// Generar alfabet amb clau+alfabet traient els caracters duplicats
+	public static String AlfabetClau(String clau) {
+		String str = "";
+
+		for (int i = 0; i < Alfabet.size(); i++) {
+			str += clau + Alfabet.get(i).charValue();
 		}
-		
-		MissatgeModificat = xifratMono;
-		
-	}
 
-	// Metode per desxifrar NUMERIC
-	public static String desxifrarTextNumeric(String text) {
-		StringBuilder xifrat = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < str.length(); i++) {
+			if (str.indexOf(str.charAt(i)) == i) {
+				// Primera impresión
+				sb.append(str.charAt(i));
+			}
 
-		// historial.add("5 "+codi);
-
-		rentarPantalla();
-		IntroduirOpcioMenuEncriptacio();
-
-		return xifrat.toString();
-	}
-
-	// Metode per xifrar NUMERIC
-	public static String xifrarTextNumeric(String text) {
-		StringBuilder xifrat = new StringBuilder();
-
-		// historial.add("6 "+codi);
-
-		rentarPantalla();
-		IntroduirOpcioMenuEncriptacio();
-
-		return xifrat.toString();
+		}
+		String result = sb.toString();
+		return result;
 	}
 
 	// Rentar pantalla
