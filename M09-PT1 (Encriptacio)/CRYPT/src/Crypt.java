@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Crypt {
@@ -62,6 +63,13 @@ public class Crypt {
 				rentarPantalla();
 				IntroduirOpcioMenuEncriptacio();
 			} else if (opcio == 5) {
+				rentarPantalla();
+				System.out.print("Introdueix un codi per xifrar (paraula): ");
+				String codi = sc.next();
+				historial.add("5 " + codi);
+				xifrarTextNumeric(codi);
+				rentarPantalla();
+				IntroduirOpcioMenuEncriptacio();
 			} else if (opcio == 6) {
 			} else if (opcio == 7) {
 				rentarPantalla();
@@ -272,7 +280,7 @@ public class Crypt {
 		String[] splitMissatgeMod = MissatgeModificat.split("");
 		String xifratMono = "";
 		int posAlfaO = 0;
-		
+
 		//
 		for (int i = 0; i < splitMissatgeMod.length; i++) {
 			String letra = splitMissatgeMod[i];
@@ -292,30 +300,62 @@ public class Crypt {
 	}
 
 	// Metode per desxifrar NUMERIC
-	public static String desxifrarTextNumeric(String text) {
-		StringBuilder xifrat = new StringBuilder();
-
-		// historial.add("5 "+codi);
+	public static void desxifrarTextNumeric(String text) {
 
 		rentarPantalla();
 		IntroduirOpcioMenuEncriptacio();
-
-		return xifrat.toString();
 	}
 
 	// Metode per xifrar NUMERIC
-	public static String xifrarTextNumeric(String text) {
-		StringBuilder xifrat = new StringBuilder();
+	public static void xifrarTextNumeric(String codi) {
+		// S'extreuen els caracters duplicats i s'afegeix el missatge a continuacio
+		String codiMissatge = codi;
 
-		// historial.add("6 "+codi);
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < codiMissatge.length(); i++) {
+			if (codiMissatge.indexOf(codiMissatge.charAt(i)) == i) {
+				// Primera impresión
+				sb.append(codiMissatge.charAt(i));
+			}
 
+		}
+		codiMissatge = sb.toString() + MissatgeModificat;
+
+		// Generem la matriu amb l'alfabet
+		String mAlfabetNum[][] = new String[1+(codiMissatge.length() / sb.toString().length())][sb.toString().length()];
+		// Emplenem la matriu
+		String[] arrayAlfaNum = codiMissatge.split("");
+
+		int cont = 0;
+		for (int i = 0; i < mAlfabetNum.length; i++) {
+			for (int j = 0; j < mAlfabetNum[i].length; j++) {
+				if (cont < arrayAlfaNum.length) {
+					mAlfabetNum[i][j] = arrayAlfaNum[cont++];
+				} else {
+					mAlfabetNum[i][j] = "";
+					cont++;
+				}
+				//System.out.print(mAlfabetNum[i][j] + " ");
+			}
+			//System.out.println();
+		}
+		
+		
+		//Reordenem l'alfabet ordenant les columnes alfabeticament per la primera lletra
+		for (int i = 0; i < 1; i++) {
+			for (int j = 0; j < mAlfabetNum[i].length; j++) {
+				System.out.print(j+1);
+			}
+			System.out.println();
+		}
+		
+		//Resultat
 		rentarPantalla();
 		IntroduirOpcioMenuEncriptacio();
-
-		return xifrat.toString();
+		// MissatgeModificat = xifratNumeric;
 	}
 
-	//Generem l'alfabet desordenat
+	// Generem l'alfabet desordenat
 	public static String crearAlfabetMono(String codi) {
 		// S'extreuen els caracters duplicats i s'afegeix l'alfabet a continuació
 		String alfabetMono = "";
