@@ -71,6 +71,13 @@ public class Crypt {
 				rentarPantalla();
 				IntroduirOpcioMenuEncriptacio();
 			} else if (opcio == 6) {
+				rentarPantalla();
+				System.out.print("Introdueix un codi per xifrar (paraula): ");
+				String codi = sc.next();
+				historial.add("6 " + codi);
+				desxifrarTextNumeric(codi);
+				rentarPantalla();
+				IntroduirOpcioMenuEncriptacio();
 			} else if (opcio == 7) {
 				rentarPantalla();
 				desencriptarTotal();
@@ -178,6 +185,10 @@ public class Crypt {
 				desxifrarTextMonoalfabetic(accioSplit[1]);
 			} else if (Integer.parseInt(accioSplit[0]) == 4) {
 				xifrarTextMonoalfabetic(accioSplit[1]);
+			} else if (Integer.parseInt(accioSplit[0]) == 5) {
+				desxifrarTextNumeric(accioSplit[1]);
+			} else if (Integer.parseInt(accioSplit[0]) == 6) {
+				xifrarTextNumeric(accioSplit[1]);
 			}
 		}
 		historial.clear();
@@ -300,8 +311,90 @@ public class Crypt {
 	}
 
 	// Metode per desxifrar NUMERIC
-	public static void desxifrarTextNumeric(String text) {
+	public static void desxifrarTextNumeric(String codi) {// S'extreuen els caracters duplicats i s'afegeix el missatge
+															// a continuacio
+		String codiMissatge = codi;
 
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < codiMissatge.length(); i++) {
+			if (codiMissatge.indexOf(codiMissatge.charAt(i)) == i) {
+				// Primera impresión
+				sb.append(codiMissatge.charAt(i));
+			}
+
+		}
+		codiMissatge = sb.toString() + MissatgeModificat;
+
+		// Generem la matriu amb l'alfabet
+		String mAlfabetNum[][] = new String[1 + (codiMissatge.length() / sb.toString().length())][sb.toString()
+				.length()];
+		// Emplenem la matriu
+		String[] arrayAlfaNum = codiMissatge.split("");
+
+		int cont = 0;
+		for (int i = 0; i < mAlfabetNum.length; i++) {
+			for (int j = 0; j < mAlfabetNum[i].length; j++) {
+				if (cont < arrayAlfaNum.length) {
+					mAlfabetNum[i][j] = arrayAlfaNum[cont++];
+				} else {
+					mAlfabetNum[i][j] = "";
+					cont++;
+				}
+			}
+		}
+
+		// Reordenem l'alfabet ordenant les columnes alfabeticament per la primera
+		// lletra
+		String mAlfabetNumFinal[][] = new String[1 + (codiMissatge.length() / sb.toString().length())][sb.toString()
+				.length()];
+
+		String letras[] = new String[sb.toString().length()];
+
+		for (int i = 0; i < 1; i++) {
+			for (int j = 0; j < mAlfabetNum[i].length; j++) {
+				if (!(mAlfabetNum[0][j].equals(null))) {
+					letras[j] = mAlfabetNum[0][j];
+				}
+
+			}
+		}
+
+		// Ordenem l'array de la primera fila
+		Arrays.sort(letras);
+
+		// Generem l'array reordenat
+
+
+		// Recorrem les primeres lletres de l'array original
+		for (int i = 0; i < sb.toString().length(); i++) {
+			// Recorrem l'array amb les primeres lletres ordenades
+			for (int j = 0; j < letras.length; j++) {
+				if (mAlfabetNum[0][i].equals(letras[j])) {
+					System.out.println("Letra original" + mAlfabetNum[0][i] + "letra ordenada" + letras[j]);
+					// Guardem aquella fila a la posicio que correspon a l'array ordenat
+					for (int j2 = 0; j2 < (1 + (codiMissatge.length() / sb.toString().length())); j2++) {
+						for (int j3 = 0; j3 < sb.toString().length(); j3++) {
+							//mAlfabetNumFinal[j2][j] = mAlfabetNum[j2][i];
+						}
+					}
+					
+				}
+
+			}
+		}
+		
+
+
+		// Recorrem l'array per columes i guardem el missatge
+		String missatgeFinal = "";
+
+		for (int i = 0; i < sb.toString().length(); i++)
+			for (int j = 0; j < (1 + (codiMissatge.length() / sb.toString().length())); j++) {
+				missatgeFinal += mAlfabetNumFinal[j][i];
+			}
+
+		// Resultat
+		MissatgeModificat = missatgeFinal;
 		rentarPantalla();
 		IntroduirOpcioMenuEncriptacio();
 	}
@@ -353,17 +446,13 @@ public class Crypt {
 				if (!(mAlfabetNum[0][j].equals(null))) {
 					letras[j] = mAlfabetNum[0][j];
 				}
-				
+
 			}
 		}
 
 		// Ordenem l'array de la primera fila
 		Arrays.sort(letras);
-		
-		for (int i = 0; i < letras.length; i++) {
-			System.out.println(letras[i]);
-		}
-			
+
 		// Generem l'array reordenat
 
 		// Recorrem l'array amb les primeres lletres ordenades
@@ -371,37 +460,25 @@ public class Crypt {
 			// Recorrem les primeres lletres de l'array original
 			for (int j = 0; j < sb.toString().length(); j++) {
 
-				if (letras[i].equals(mAlfabetNum[0][j])) {		
-				System.out.println("letras: "+letras[i]+" ArrOriginal: "+mAlfabetNum[0][j]);
-				// Guardem aquella fila a la posicio que correspon a l'array ordenat
-				for (int j2 = 0; j2 < mAlfabetNum.length; j2++) {
-					for (int j3 = 0; j3 < mAlfabetNum[j2].length; j3++) {
-						mAlfabetNumFinal[j2][i] = mAlfabetNum[j2][j];
+				if (letras[i].equals(mAlfabetNum[0][j])) {
+					// Guardem aquella fila a la posicio que correspon a l'array ordenat
+					for (int j2 = 0; j2 < mAlfabetNum.length; j2++) {
+						for (int j3 = 0; j3 < mAlfabetNum[j2].length; j3++) {
+							mAlfabetNumFinal[j2][i] = mAlfabetNum[j2][j];
+						}
 					}
 				}
-				}
-				
+
 			}
 		}
-		
-//		// Si coincideix la lletra
-//		if (letras[i].equals(mAlfabetNum[0][j])) {					
-//			// Guardem aquella fila a la posicio que correspon a l'array ordenat
-//			for (int j2 = 0; j2 < mAlfabetNum.length; j2++) {
-//				for (int j3 = 0; j3 < mAlfabetNum[j2].length; j3++) {
-//					mAlfabetNumFinal[j2][i] = mAlfabetNum[j2][j];
-//				}
-//			}
-//		}
-		
-		//Recorrem l'array per columes i guardem el missatge
-		String missatgeFinal = "";
-		
-		for (int i = 0; i < sb.toString().length(); i++)	
-		for (int j = 0; j < (1 + (codiMissatge.length() / sb.toString().length())); j++){	
-			missatgeFinal += mAlfabetNumFinal[j][i];
-		}
 
+		// Recorrem l'array per columes i guardem el missatge
+		String missatgeFinal = "";
+
+		for (int i = 0; i < sb.toString().length(); i++)
+			for (int j = 0; j < (1 + (codiMissatge.length() / sb.toString().length())); j++) {
+				missatgeFinal += mAlfabetNumFinal[j][i];
+			}
 
 		// Resultat
 		MissatgeModificat = missatgeFinal;
