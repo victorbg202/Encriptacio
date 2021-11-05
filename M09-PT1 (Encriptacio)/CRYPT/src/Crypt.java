@@ -346,7 +346,7 @@ public class Crypt {
 		String mAlfabetNumFinal[][] = new String[1 + (codiMissatge.length() / sb.toString().length())][sb.toString()
 				.length()];
 
-		String letras[] = new String[codi.length()];
+		String letras[] = new String[sb.toString().length()];
 
 		for (int i = 0; i < 1; i++) {
 			for (int j = 0; j < mAlfabetNum[i].length; j++) {
@@ -359,24 +359,40 @@ public class Crypt {
 
 		// Ordenem l'array de la primera fila
 		Arrays.sort(letras);
-
+		
+		for (int i = 0; i < letras.length; i++) {
+			System.out.println(letras[i]);
+		}
+			
 		// Generem l'array reordenat
 
 		// Recorrem l'array amb les primeres lletres ordenades
-		for (int i = 0; i < codi.length(); i++) {
+		for (int i = 0; i < letras.length; i++) {
 			// Recorrem les primeres lletres de l'array original
-			for (int j = 0; j < mAlfabetNum[i].length; j++) {
-				// Si coincideix la lletra
-				if (letras[i].equals(mAlfabetNum[0][j])) {					
-					// Guardem aquella fila a la posicio que correspon a l'array ordenat
-					for (int j2 = 0; j2 < mAlfabetNum.length; j2++) {
-						for (int j3 = 0; j3 < mAlfabetNum[j2].length; j3++) {
-							mAlfabetNumFinal[j2][i] = mAlfabetNum[j2][j];
-						}
+			for (int j = 0; j < sb.toString().length(); j++) {
+
+				if (letras[i].equals(mAlfabetNum[0][j])) {		
+				System.out.println("letras: "+letras[i]+" ArrOriginal: "+mAlfabetNum[0][j]);
+				// Guardem aquella fila a la posicio que correspon a l'array ordenat
+				for (int j2 = 0; j2 < mAlfabetNum.length; j2++) {
+					for (int j3 = 0; j3 < mAlfabetNum[j2].length; j3++) {
+						mAlfabetNumFinal[j2][i] = mAlfabetNum[j2][j];
 					}
 				}
+				}
+				
 			}
 		}
+		
+//		// Si coincideix la lletra
+//		if (letras[i].equals(mAlfabetNum[0][j])) {					
+//			// Guardem aquella fila a la posicio que correspon a l'array ordenat
+//			for (int j2 = 0; j2 < mAlfabetNum.length; j2++) {
+//				for (int j3 = 0; j3 < mAlfabetNum[j2].length; j3++) {
+//					mAlfabetNumFinal[j2][i] = mAlfabetNum[j2][j];
+//				}
+//			}
+//		}
 		
 		//Recorrem l'array per columes i guardem el missatge
 		String missatgeFinal = "";
